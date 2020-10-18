@@ -467,7 +467,7 @@ class Matcher:
         return len(self.matched_data[self.matched_data[self.yvar] == self.minority]) * 1.0 / \
                len(self.data[self.data[self.yvar] == self.minority])
 
-    def tune_threshold(self, method, nmatches=1, rng=np.arange(0, .001, .0001)):
+    def tune_threshold(self, method, nmatches=1, rng=np.arange(0, .001, .0001), plot=True, threshold=None):
         """
         Matches data over a grid to optimize threshold value and plots results.
 
@@ -477,23 +477,39 @@ class Matcher:
             Method used for matching (use "random" for this method)
         nmatches : int
             Max number of matches per record. See pymatch.match()
-        rng: : list / np.array()
-            Grid of threshold values
-
-        Returns
+        rng : list / np.array()
+            Grid of threshold values (1xN)
+        plot : True/False    # EC
+            Plot option
+        threshold : float
+            The given value for selecting the minimum (optimal) threshold value 
         -------
-        None
-
+        Returns :
+            [rng, results] : [1x1, 1x1] or [1xN, 1xN]
+                rng : threshold value
+                results : proportion retained
+    
+                If the threshold argument is not None, then the dimension of [rng, results] is [1x1, 1x1]
+                Otherwiese, the dimension of [rng, results] is [1xN, 1xN]
         """
         results = []
         for i in rng:
             self.match(method=method, nmatches=nmatches, threshold=i)
             results.append(self.prop_retained())
-        plt.plot(rng, results)
-        plt.title("Proportion of Data retained for grid of threshold values")
-        plt.ylabel("Proportion Retained")
-        plt.xlabel("Threshold")
-        plt.xticks(rng)
+        if plot == True:
+            plt.plot(rng, results)
+            plt.title("Proportion of Data retained for grid of threshold values")
+            plt.ylabel("Proportion Retained")
+            plt.xlabel("Threshold")
+            plt.xticks(rng)
+        if threshold is not None:
+            try:
+                idx = np.min(np.where(results >= threshold))
+                rng = rng[idx]
+                results = results[idx]
+            except:
+                pass
+        return [rng, results]
 
     def record_frequency(self):
         """
