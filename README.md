@@ -15,7 +15,7 @@ This package was used to support [this research project](https://dl.acm.org/cita
 Install through pip!
 
 ```bash
-$ pip install pymatch
+$ pip install git+git://github.com/eclee/pymatch.git
 ```
 
 # 
