@@ -502,6 +502,7 @@ class Matcher:
             plt.ylabel("Proportion Retained")
             plt.xlabel("Threshold")
             plt.xticks(rng)
+
         if threshold is not None:
             try:
                 idx = np.min(np.where(results >= threshold))
