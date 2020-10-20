@@ -58,7 +58,7 @@ class Matcher:
         self.minority, self.majority = [i[1] for i in sorted(zip([self.testn, self.controln],
                                                                  [1, 0]),
                                                              key=lambda x: x[0])]
-        self.tuned = None  # EC
+        self.tuned = []  # EC
         print('Formula:\n{} ~ {}'.format(yvar, '+'.join(self.xvars)))
         print('n majority:', len(self.data[self.data[yvar] == self.majority]))
         print('n minority:', len(self.data[self.data[yvar] == self.minority]))
@@ -511,7 +511,7 @@ class Matcher:
                 results = results[idx]
             except:
                 pass
-        self.tuned = zip(rng, results)
+        self.tuned = list(zip(rng, results))
 
     def record_frequency(self):
         """
