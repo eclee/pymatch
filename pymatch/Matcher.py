@@ -496,7 +496,8 @@ class Matcher:
         for i in rng:
             self.match(method=method, nmatches=nmatches, threshold=i)
             results.append(self.prop_retained())
-		results = np.array(results)
+        results = np.array(results)
+        
         if plot == True:
             plt.plot(rng, results)
             plt.title("Proportion of Data retained for grid of threshold values")
@@ -509,9 +510,9 @@ class Matcher:
                 rng = rng[idx]
                 results = results[idx]
             except:
-				print(f'tune_threshold(): No results >= {ratio}')
+                print(f'tune_threshold(): No results >= {ratio}')
         self.tune_threshold_x = rng
-		self.tune_threshold_y = results
+        self.tune_threshold_y = results
 		
     def record_frequency(self):
         """
