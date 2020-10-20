@@ -58,6 +58,7 @@ class Matcher:
         self.minority, self.majority = [i[1] for i in sorted(zip([self.testn, self.controln],
                                                                  [1, 0]),
                                                              key=lambda x: x[0])]
+        self.tunred = None  # EC
         print('Formula:\n{} ~ {}'.format(yvar, '+'.join(self.xvars)))
         print('n majority:', len(self.data[self.data[yvar] == self.majority]))
         print('n minority:', len(self.data[self.data[yvar] == self.minority]))
@@ -467,7 +468,7 @@ class Matcher:
         return len(self.matched_data[self.matched_data[self.yvar] == self.minority]) * 1.0 / \
                len(self.data[self.data[self.yvar] == self.minority])
 
-    def tune_threshold(self, method, nmatches=1, rng=np.arange(0, .001, .0001), plot=True, threshold=None):
+    def tune_threshold(self, method, nmatches=1, rng=np.arange(0, .001, .0001), plot=True, threshold=None):   # EC
         """
         Matches data over a grid to optimize threshold value and plots results.
 
@@ -496,21 +497,21 @@ class Matcher:
         for i in rng:
             self.match(method=method, nmatches=nmatches, threshold=i)
             results.append(self.prop_retained())
-        if plot == True:
+        if plot == True:             # EC
             plt.plot(rng, results)
             plt.title("Proportion of Data retained for grid of threshold values")
             plt.ylabel("Proportion Retained")
             plt.xlabel("Threshold")
             plt.xticks(rng)
 
-        if threshold is not None:
+        if threshold is not None:    # EC
             try:
                 idx = np.min(np.where(results >= threshold))
                 rng = rng[idx]
                 results = results[idx]
             except:
                 pass
-        return [rng, results]
+        self.tunred = zip(rng, results)
 
     def record_frequency(self):
         """
