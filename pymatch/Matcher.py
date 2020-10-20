@@ -59,7 +59,7 @@ class Matcher:
                                                                  [1, 0]),
                                                              key=lambda x: x[0])]
         self.tune_threshold_x = []
-		self.tune_threshold_y = []
+        self.tune_threshold_y = []
         print('Formula:\n{} ~ {}'.format(yvar, '+'.join(self.xvars)))
         print('n majority:', len(self.data[self.data[yvar] == self.majority]))
         print('n minority:', len(self.data[self.data[yvar] == self.minority]))
