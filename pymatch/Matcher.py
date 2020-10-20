@@ -58,7 +58,7 @@ class Matcher:
         self.minority, self.majority = [i[1] for i in sorted(zip([self.testn, self.controln],
                                                                  [1, 0]),
                                                              key=lambda x: x[0])]
-        self.tuned = []  # EC
+        self.tuned = []
         print('Formula:\n{} ~ {}'.format(yvar, '+'.join(self.xvars)))
         print('n majority:', len(self.data[self.data[yvar] == self.majority]))
         print('n minority:', len(self.data[self.data[yvar] == self.minority]))
@@ -129,7 +129,6 @@ class Matcher:
             self.model_accuracy.append(self._scores_to_accuracy(res, self.X, self.y))
             self.models.append(res)
             print("\nAccuracy", round(np.mean(self.model_accuracy[0]) * 100, 2))
-
 
     def predict_scores(self):
         """
@@ -468,7 +467,7 @@ class Matcher:
         return len(self.matched_data[self.matched_data[self.yvar] == self.minority]) * 1.0 / \
                len(self.data[self.data[self.yvar] == self.minority])
 
-    def tune_threshold(self, method, nmatches=1, rng=np.arange(0, .001, .0001), plot=True, threshold=None):   # EC
+    def tune_threshold(self, method, nmatches=1, rng=np.arange(0, .001, .0001), plot=True, threshold=None):
         """
         Matches data over a grid to optimize threshold value and plots results.
 
@@ -480,31 +479,30 @@ class Matcher:
             Max number of matches per record. See pymatch.match()
         rng : list / np.array()
             Grid of threshold values (1xN)
-        plot : True/False    # EC
+        plot : True/False
             Plot option
         threshold : float
             The given value for selecting the minimum (optimal) threshold value 
-        -------
+        
         Returns :
-            [rng, results] : [1x1, 1x1] or [1xN, 1xN]
+			If the threshold argument is not None, then return the list(zip(rng, results)))
+		-------
+            [(rng, results)] : list(zip)
                 rng : threshold value
                 results : proportion retained
-    
-                If the threshold argument is not None, then the dimension of [rng, results] is [1x1, 1x1]
-                Otherwiese, the dimension of [rng, results] is [1xN, 1xN]
         """
         results = []
         for i in rng:
             self.match(method=method, nmatches=nmatches, threshold=i)
             results.append(self.prop_retained())
-        if plot == True:             # EC
+        if plot == True:
             plt.plot(rng, results)
             plt.title("Proportion of Data retained for grid of threshold values")
             plt.ylabel("Proportion Retained")
             plt.xlabel("Threshold")
             plt.xticks(rng)
 
-        if threshold is not None:    # EC
+        if threshold is not None:
             try:
                 idx = np.min(np.where(results >= threshold))
                 rng = rng[idx]
